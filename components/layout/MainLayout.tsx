@@ -4,6 +4,7 @@ import { theme } from '../../utils/theme';
 import { GlobalStyle } from '../../utils/globalStyle';
 import Head from 'next/head';
 import { Layout } from 'antd';
+import { MainFooter } from './MainFooter';
 
 const { Content } = Layout;
 
@@ -64,6 +65,7 @@ export class MainLayout extends Component<Props> {
         <GlobalStyle />
         <Layout>
           <Content>{children}</Content>
+          <MainFooter />
         </Layout>
       </ThemeProvider>
     );
