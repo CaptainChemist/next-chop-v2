@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^4.2.2",
+    "dotenv": "^8.2.0",
     "next": "^9.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
