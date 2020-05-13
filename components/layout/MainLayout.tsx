@@ -3,6 +3,9 @@ import { Component, ReactNode } from 'react';
 import { theme } from '../../utils/theme';
 import { GlobalStyle } from '../../utils/globalStyle';
 import Head from 'next/head';
+import { Layout } from 'antd';
+
+const { Content } = Layout;
 
 const MainHead = ({ title }: { title: string }) => (
   <Head>
@@ -59,7 +62,9 @@ export class MainLayout extends Component<Props> {
       <ThemeProvider theme={theme}>
         <MainHead title={title} />
         <GlobalStyle />
-        {children}
+        <Layout>
+          <Content>{children}</Content>
+        </Layout>
       </ThemeProvider>
     );
   }
