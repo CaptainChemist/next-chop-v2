@@ -4,6 +4,9 @@ import { userLikesGraphQL } from '../graphql/queries/userLikes';
 import * as _ from 'lodash';
 import { Row } from 'antd';
 import { Recipe } from '../generated/apollo-components';
+import { Loading } from './notify/Loading';
+import { Warning } from './notify/Warning';
+import { Error } from './notify/Error';
 
 export enum queryEnum {
   userLikes = 'userLikes',
@@ -30,12 +33,16 @@ export const RecipesList = ({
   const recipesList = _.map(parentArray, (value) =>
     _.get(value, 'recipe', value),
   );
-  console.log(data);
-  console.log(parentArray);
 
-  if (loading) return <p>Loading</p>;
-  if (error) return <p>Error</p>;
-  if (recipesList.length === 0) return <p>Warning</p>;
+  if (loading) return <Loading />;
+  if (error) return <Error errorText={`${error}`} />;
+  if (recipesList.length === 0)
+    return (
+      <Warning
+        warningHeader="No Recipes"
+        warningText="No Recipes are present. Why not add one?"
+      />
+    );
 
   return (
     <Row>
