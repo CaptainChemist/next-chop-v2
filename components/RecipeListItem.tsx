@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import EllipsisText from 'react-ellipsis-text';
 import GraphImage from 'graphcms-image';
 import Link from 'next/link';
+import { LikeButton } from './LikeButton';
 
 const StyledRecipe = styled(Col)`
   ${({ theme }) => `
@@ -51,7 +52,7 @@ export const RecipeListItem = ({
   recipe: Recipe;
   parentRoute: string;
 }) => {
-  const { title, description, image, id } = recipe;
+  const { title, description, image, id, userLikes } = recipe;
 
   return (
     <StyledRecipe
@@ -64,7 +65,10 @@ export const RecipeListItem = ({
         <Link href={`/${parentRoute}/${id}`}>
           <div>{image ? <GraphImage image={image} /> : null}</div>
         </Link>
-        <h3>{title}</h3>
+        <h3>
+          {title}
+          <LikeButton userLikes={userLikes} recipeId={id} />
+        </h3>
         <p>
           <EllipsisText text={description} length={110} />
         </p>

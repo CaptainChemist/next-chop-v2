@@ -5,6 +5,7 @@ import GraphImg from 'graphcms-image';
 import * as _ from 'lodash';
 import { generateUnit } from '../utils/generateUnit';
 import { GenerateContent } from './GenerateContent';
+import { LikeButton } from './LikeButton';
 
 const StyledOneRecipe = styled(Col)`
   ${({ theme }) => `
@@ -43,9 +44,8 @@ const StyledOneRecipe = styled(Col)`
 `;
 
 export const OneRecipe = ({ recipe }: { recipe: Recipe }) => {
-  const { image, title, description, content } = recipe;
+  const { image, title, description, content, userLikes, id } = recipe;
   const ingredients = _.get(recipe, 'ingredients');
-  console.log(content);
   return (
     <Row>
       <StyledOneRecipe
@@ -58,7 +58,10 @@ export const OneRecipe = ({ recipe }: { recipe: Recipe }) => {
         </Row>
         <Row>
           <Col span={20} offset={2}>
-            <h1>{title}</h1>
+            <h1>
+              {title}
+              <LikeButton userLikes={userLikes} recipeId={id} />
+            </h1>
             <p>{description}</p>
           </Col>
         </Row>
