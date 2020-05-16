@@ -34,7 +34,7 @@ export async function fetchUser(cookie = '') {
   }
   return json;
 }
-
+// @ts-ignore
 export function useFetchUser({ required } = {}) {
   const [loading, setLoading] = useState(
     () => !(typeof window !== 'undefined' && window.__user),
