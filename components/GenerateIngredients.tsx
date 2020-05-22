@@ -1,4 +1,5 @@
-import { Row, Col, Button, Table, Input } from 'antd';
+import { Row, Col, Button, Table, Input, Dropdown } from 'antd';
+import { MenuList } from './MenuList';
 
 type IngredientsProps = {
   names?: string[];
@@ -8,6 +9,8 @@ type IngredientsProps = {
   handleInputChange: (event: any) => void;
   handleDropdownChange: (event: any) => void;
 };
+
+const units = ['-', 'ounce', 'lb', 'cup', 'tb', 'tsp', 'g', 'kg'];
 
 export const GenerateIngredients = ({
   names,
@@ -21,7 +24,20 @@ export const GenerateIngredients = ({
     title: `${name}`,
     key: `${name}`,
     render: (ingredient, _record, index: number) => {
-      return (
+      return name === 'unit' ? (
+        <Dropdown
+          overlay={
+            <MenuList
+              iterableList={units}
+              name={`ingredients[${index}].${name}`}
+              handleDropdownChange={handleDropdownChange}
+            />
+          }
+          placement="bottomLeft"
+        >
+          <Button>{ingredient[name]}</Button>
+        </Dropdown>
+      ) : (
         <Input
           placeholder={`${name}`}
           name={`ingredients[${index}].${name}`}

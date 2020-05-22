@@ -14,6 +14,7 @@ export const CreateRecipe = () => {
     handleInputChange,
     handleAddIngredient,
     handleDeleteIngredient,
+    handleDropdownChange,
     handleSubmit,
   } = submitForm(
     {
@@ -48,6 +49,7 @@ export const CreateRecipe = () => {
         handleAddIngredient={handleAddIngredient}
         handleDeleteIngredient={handleDeleteIngredient}
         handleInputChange={handleInputChange}
+        handleDropdownChange={handleDropdownChange}
       />
       <Row>
         <Col span={16} />

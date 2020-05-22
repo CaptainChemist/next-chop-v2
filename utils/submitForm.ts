@@ -12,9 +12,15 @@ export const submitForm = (initialValues, callback) => {
       return newInputs;
     });
   };
-  const handleAddIngredient = (event) => {
-    console.log('added');
 
+  const handleDropdownChange = (event) => {
+    setInputs((inputs) => {
+      const newInputs = _.cloneDeep(inputs);
+      _.set(newInputs, event.item.props.title, event.key);
+      return newInputs;
+    });
+  };
+  const handleAddIngredient = (event) => {
     event.persist();
     setInputs((inputs) => {
       const sortedIngredients = _.sortBy(inputs.ingredients, ['key']);
@@ -45,5 +51,6 @@ export const submitForm = (initialValues, callback) => {
     handleInputChange,
     handleAddIngredient,
     handleDeleteIngredient,
+    handleDropdownChange,
   };
 };
