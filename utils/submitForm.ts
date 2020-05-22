@@ -12,6 +12,27 @@ export const submitForm = (initialValues, callback) => {
       return newInputs;
     });
   };
+  const handleAddIngredient = (event) => {
+    console.log('added');
+
+    event.persist();
+    setInputs((inputs) => {
+      const sortedIngredients = _.sortBy(inputs.ingredients, ['key']);
+
+      const key =
+        sortedIngredients.length > 0
+          ? sortedIngredients[sortedIngredients.length - 1].key + 1
+          : 0;
+      return {
+        ...inputs,
+        ingredients: _.concat(inputs.ingredients, [
+          { key, amount: '', unit: '-', type: '' },
+        ]),
+      };
+    });
+  };
+
+  const handleDeleteIngredient = () => console.log('deleted');
 
   const handleSubmit = () => {
     callback();
@@ -22,5 +43,7 @@ export const submitForm = (initialValues, callback) => {
     inputs,
     handleSubmit,
     handleInputChange,
+    handleAddIngredient,
+    handleDeleteIngredient,
   };
 };
