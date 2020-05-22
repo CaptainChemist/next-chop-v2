@@ -1,16 +1,18 @@
 import { Row, Col, Form, Button } from 'antd';
 import { submitForm } from '../utils/submitForm';
-import { GenerateInput } from './GenerateFields';
+import { GenerateInput, GenerateTextInput } from './GenerateFields';
 
 export const CreateRecipe = () => {
   const initiateCreateRecipe = () => {
     console.log('submitted form');
+    console.log(inputs);
   };
 
   const { inputs, handleInputChange, handleSubmit } = submitForm(
     {
       title: '',
       description: '',
+      content: '',
     },
     initiateCreateRecipe,
   );
@@ -25,6 +27,11 @@ export const CreateRecipe = () => {
       <GenerateInput
         name="description"
         value={inputs.description}
+        handleInputChange={handleInputChange}
+      />
+      <GenerateTextInput
+        name="content"
+        value={inputs.content}
         handleInputChange={handleInputChange}
       />
       <Row>
