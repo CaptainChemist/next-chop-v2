@@ -39,7 +39,6 @@ export const submitForm = (initialValues, callback) => {
   };
 
   const handleDeleteIngredient = (event) => {
-    console.log('deleted');
     event.persist();
     const position = parseInt(event.target.name);
     setInputs((inputs) => ({
