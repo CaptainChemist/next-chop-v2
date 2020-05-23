@@ -57,6 +57,7 @@ export const submitForm = (initialValues, callback) => {
 
   return {
     inputs,
+    setInputs,
     handleSubmit,
     handleInputChange,
     handleAddIngredient,
