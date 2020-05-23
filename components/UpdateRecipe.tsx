@@ -9,6 +9,7 @@ import { GenerateIngredients } from './GenerateIngredients';
 import { Loading } from './notify/Loading';
 import { createUpdateObj } from '../utils/createUpdateObj';
 import { updateRecipeGraphQL } from '../graphql/mutations/updateRecipe';
+import { DeleteButton } from './DeleteButton';
 
 export const UpdateRecipe = ({ id }) => {
   const { loading: isQueryLoading, data, error } = useQuery(recipeGraphQL, {
@@ -58,6 +59,8 @@ export const UpdateRecipe = ({ id }) => {
 
   if (!data) return <Loading />;
 
+  const disabled = isQueryLoading || updateRecipeLoading;
+
   return (
     <Form onFinish={handleUpdate}>
       <GenerateInput
@@ -86,14 +89,11 @@ export const UpdateRecipe = ({ id }) => {
       <Row>
         <Col span={16} />
         <Col span={4}>
-          <Form.Item label="Update Recipe">
-            <Button
-              disabled={isQueryLoading || updateRecipeLoading}
-              type="primary"
-              htmlType="submit"
-            >
+          <Form.Item label="Action">
+            <Button block disabled={disabled} type="primary" htmlType="submit">
               Update Recipe
             </Button>
+            <DeleteButton id={id} disabled={disabled} />
           </Form.Item>
         </Col>
       </Row>
