@@ -8,6 +8,7 @@ import { useFetchUser } from '../utils/user';
 import * as _ from 'lodash';
 import { Loading } from './notify/Loading';
 import Router from 'next/router';
+import { recipesGraphQL } from '../graphql/queries/recipes';
 
 export const CreateRecipe = () => {
   const [createRecipeMutation, { loading }] = useMutation(createRecipeGraphQL);
@@ -16,6 +17,7 @@ export const CreateRecipe = () => {
 
   const initiateCreateRecipe = () => {
     createRecipeMutation({
+      refetchQueries: [{ query: recipesGraphQL }],
       variables: {
         data: {
           ...inputs,

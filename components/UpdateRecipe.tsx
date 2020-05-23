@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { recipeGraphQL } from '../graphql/queries/recipe';
 import { submitForm } from '../utils/submitForm';
 import { useState } from 'react';
@@ -7,15 +7,31 @@ import { Form, Row, Col, Button } from 'antd';
 import { GenerateInput, GenerateTextInput } from './GenerateFields';
 import { GenerateIngredients } from './GenerateIngredients';
 import { Loading } from './notify/Loading';
+import { createUpdateObj } from '../utils/createUpdateObj';
+import { updateRecipeGraphQL } from '../graphql/mutations/updateRecipe';
 
 export const UpdateRecipe = ({ id }) => {
   const { loading: isQueryLoading, data, error } = useQuery(recipeGraphQL, {
     variables: { where: { id } },
   });
+  const [updateRecipeMutation, { loading: updateRecipeLoading }] = useMutation(
+    updateRecipeGraphQL,
+  );
 
   const [recipeState, setRecipeState] = useState({ isQueryLoading: true });
 
-  const initiateUpdateRecipe = () => console.log('updated');
+  const initiateUpdateRecipe = () => {
+    const updateObj = createUpdateObj(data, inputs);
+    return updateRecipeMutation({
+      refetchQueries: [{ query: recipeGraphQL, variables: { where: { id } } }],
+      variables: {
+        data: {
+          ...updateObj,
+        },
+        where: { id },
+      },
+    });
+  };
 
   const {
     inputs,
@@ -23,7 +39,7 @@ export const UpdateRecipe = ({ id }) => {
     handleAddIngredient,
     handleDeleteIngredient,
     handleDropdownChange,
-    handleSubmit,
+    handleUpdate,
     setInputs,
   } = submitForm(
     {
@@ -43,7 +59,7 @@ export const UpdateRecipe = ({ id }) => {
   if (!data) return <Loading />;
 
   return (
-    <Form>
+    <Form onFinish={handleUpdate}>
       <GenerateInput
         name="title"
         value={inputs.title}
@@ -71,7 +87,11 @@ export const UpdateRecipe = ({ id }) => {
         <Col span={16} />
         <Col span={4}>
           <Form.Item label="Update Recipe">
-            <Button disabled={false} type="primary" htmlType="submit">
+            <Button
+              disabled={isQueryLoading || updateRecipeLoading}
+              type="primary"
+              htmlType="submit"
+            >
               Update Recipe
             </Button>
           </Form.Item>

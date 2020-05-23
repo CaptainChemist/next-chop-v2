@@ -50,6 +50,13 @@ export const submitForm = (initialValues, callback) => {
     }));
   };
 
+  const handleUpdate = async () => {
+    const updatedResult = await callback();
+    const { updateRecipe } = updatedResult.data;
+    const { content, description, status, title, ingredients } = updateRecipe;
+    setInputs(() => ({ content, description, status, title, ingredients }));
+  };
+
   const handleSubmit = () => {
     callback();
     setInputs(() => ({ ...initialValues }));
@@ -59,6 +66,7 @@ export const submitForm = (initialValues, callback) => {
     inputs,
     setInputs,
     handleSubmit,
+    handleUpdate,
     handleInputChange,
     handleAddIngredient,
     handleDeleteIngredient,
