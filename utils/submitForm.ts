@@ -38,7 +38,18 @@ export const submitForm = (initialValues, callback) => {
     });
   };
 
-  const handleDeleteIngredient = () => console.log('deleted');
+  const handleDeleteIngredient = (event) => {
+    console.log('deleted');
+    event.persist();
+    const position = parseInt(event.target.name);
+    setInputs((inputs) => ({
+      ...inputs,
+      ingredients: _.filter(
+        inputs.ingredients,
+        (_i, index) => index !== position,
+      ),
+    }));
+  };
 
   const handleSubmit = () => {
     callback();

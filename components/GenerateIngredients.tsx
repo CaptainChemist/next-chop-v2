@@ -1,5 +1,6 @@
 import { Row, Col, Button, Table, Input, Dropdown } from 'antd';
 import { MenuList } from './MenuList';
+import * as _ from 'lodash';
 
 type IngredientsProps = {
   names?: string[];
@@ -20,33 +21,52 @@ export const GenerateIngredients = ({
   handleInputChange,
   handleDropdownChange,
 }: IngredientsProps) => {
-  const columns = names.map((name) => ({
-    title: `${name}`,
-    key: `${name}`,
-    render: (ingredient, _record, index: number) => {
-      return name === 'unit' ? (
-        <Dropdown
-          overlay={
-            <MenuList
-              iterableList={units}
-              name={`ingredients[${index}].${name}`}
-              handleDropdownChange={handleDropdownChange}
-            />
-          }
-          placement="bottomLeft"
-        >
-          <Button>{ingredient[name]}</Button>
-        </Dropdown>
-      ) : (
-        <Input
-          value={ingredient[name]}
-          placeholder={`${name}`}
-          name={`ingredients[${index}].${name}`}
-          onChange={handleInputChange}
-        />
-      );
-    },
-  }));
+  const columns = _.concat(
+    names.map((name) => ({
+      title: `${name}`,
+      key: `${name}`,
+      render: (ingredient, _record, index: number) => {
+        return name === 'unit' ? (
+          <Dropdown
+            overlay={
+              <MenuList
+                iterableList={units}
+                name={`ingredients[${index}].${name}`}
+                handleDropdownChange={handleDropdownChange}
+              />
+            }
+            placement="bottomLeft"
+          >
+            <Button>{ingredient[name]}</Button>
+          </Dropdown>
+        ) : (
+          <Input
+            value={ingredient[name]}
+            placeholder={`${name}`}
+            name={`ingredients[${index}].${name}`}
+            onChange={handleInputChange}
+          />
+        );
+      },
+    })),
+    [
+      {
+        title: 'delete',
+        key: 'delete',
+        render: (_ingredient, _record, index: number) => (
+          <Button
+            onClick={handleDeleteIngredient}
+            type="danger"
+            shape="circle"
+            size="small"
+            name={`${index}`}
+          >
+            -
+          </Button>
+        ),
+      },
+    ],
+  );
 
   return (
     <>
