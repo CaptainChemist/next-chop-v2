@@ -3,11 +3,20 @@ import { GraphQLClient } from 'graphql-request';
 
 const { serverRuntimeConfig } = getConfig();
 
-const { BRANCH, GRAPHCMSURL, GRAPHCMSPROJECTID } = serverRuntimeConfig.graphcms;
+const {
+  BRANCH,
+  GRAPHCMSURL,
+  GRAPHCMSPROJECTID,
+  GRAPHCMS_TOKEN,
+} = serverRuntimeConfig.graphcms;
 
 const graphqlEndpoint = `${GRAPHCMSURL}/${GRAPHCMSPROJECTID}/${BRANCH}`;
 
-export const graphQLClient = new GraphQLClient(graphqlEndpoint, {});
+export const graphQLClient = new GraphQLClient(graphqlEndpoint, {
+  headers: {
+    authorization: `Bearer ${GRAPHCMS_TOKEN}`,
+  },
+});
 
 async function proxyGraphql(req, res) {
   try {

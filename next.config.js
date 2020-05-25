@@ -11,6 +11,7 @@ const {
   postLogoutRedirectUri,
   cookieSecret,
   BACKEND_URL,
+  GRAPHCMS_TOKEN,
 } = process.env;
 
 module.exports = {
@@ -22,6 +23,7 @@ module.exports = {
       BRANCH,
       GRAPHCMSURL,
       GRAPHCMSPROJECTID,
+      GRAPHCMS_TOKEN,
     },
     auth: {
       domain,
