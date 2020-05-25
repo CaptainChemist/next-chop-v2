@@ -3,6 +3,7 @@ import { GraphQLClient } from 'graphql-request';
 import {
   verifyNotABannedMutation,
   verifyUserMutation,
+  verifyUserPermissions,
 } from '../../utils/verify';
 
 const { serverRuntimeConfig } = getConfig();
@@ -26,6 +27,7 @@ async function proxyGraphql(req, res) {
   try {
     await verifyNotABannedMutation(req, res);
     await verifyUserMutation(req, res);
+    await verifyUserPermissions(req, res);
     const { variables, query } = req.body;
     const data = await graphQLClient.rawRequest(query, variables);
     res.json(data);
