@@ -56,6 +56,7 @@ export const GenerateIngredients = ({
         render: (_ingredient, _record, index: number) => (
           <Button
             onClick={handleDeleteIngredient}
+            // @ts-ignore
             type="danger"
             shape="circle"
             size="small"

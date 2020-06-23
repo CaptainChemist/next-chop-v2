@@ -12,11 +12,21 @@ const {
   cookieSecret,
   BACKEND_URL,
   GRAPHCMS_TOKEN,
+  CDNBASE,
+  APIURL,
+  APIKEY,
 } = process.env;
 
 module.exports = {
   publicRuntimeConfig: {
     backend: { BACKEND_URL },
+    graphcms: {
+      GRAPHCMSPROJECTID,
+      BRANCH,
+      CDNBASE,
+      APIURL,
+      APIKEY,
+    },
   },
   serverRuntimeConfig: {
     graphcms: {

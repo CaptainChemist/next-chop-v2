@@ -52,9 +52,22 @@ export const submitForm = (initialValues, callback) => {
 
   const handleUpdate = async () => {
     const updatedResult = await callback();
-    const { updateRecipe } = updatedResult.data;
-    const { content, description, status, title, ingredients } = updateRecipe;
-    setInputs(() => ({ content, description, status, title, ingredients }));
+    const {
+      content,
+      description,
+      status,
+      title,
+      ingredients,
+      image,
+    } = updatedResult;
+    setInputs(() => ({
+      content,
+      description,
+      status,
+      title,
+      ingredients,
+      image,
+    }));
   };
 
   const handleSubmit = () => {
@@ -62,10 +75,20 @@ export const submitForm = (initialValues, callback) => {
     setInputs(() => ({ ...initialValues }));
   };
 
+  const handleSubmitImage = (image) => {
+    setInputs((inputs) => {
+      const newInput = _.cloneDeep(inputs);
+      _.set(newInput, 'image', image);
+      console.log(newInput);
+      return newInput;
+    });
+  };
+
   return {
     inputs,
     setInputs,
     handleSubmit,
+    handleSubmitImage,
     handleUpdate,
     handleInputChange,
     handleAddIngredient,

@@ -10,6 +10,9 @@ import { Loading } from './notify/Loading';
 import { createUpdateObj } from '../utils/createUpdateObj';
 import { updateRecipeGraphQL } from '../graphql/mutations/updateRecipe';
 import { DeleteButton } from './DeleteButton';
+import { PictureUploader } from './PictureUploader';
+import GraphImg from 'graphcms-image';
+import { deleteAssetGraphQL } from '../graphql/mutations/deleteAsset';
 
 export const UpdateRecipe = ({ id }) => {
   const { loading: isQueryLoading, data, error } = useQuery(recipeGraphQL, {
@@ -18,20 +21,47 @@ export const UpdateRecipe = ({ id }) => {
   const [updateRecipeMutation, { loading: updateRecipeLoading }] = useMutation(
     updateRecipeGraphQL,
   );
+  const [deleteAssetMutation, { loading: deleteAssetLoading }] = useMutation(
+    deleteAssetGraphQL,
+  );
 
-  const [recipeState, setRecipeState] = useState({ isQueryLoading: true });
+  const [recipeState, setRecipeState] = useState({
+    isQueryLoading: true,
+    isPicUploading: false,
+  });
 
-  const initiateUpdateRecipe = () => {
-    const updateObj = createUpdateObj(data, inputs);
-    return updateRecipeMutation({
-      refetchQueries: [{ query: recipeGraphQL, variables: { where: { id } } }],
-      variables: {
-        data: {
-          ...updateObj,
+  const initiateUpdateRecipe = async () => {
+    const queryImageHandle = _.get(data, 'recipe.image.handle');
+    const inputsImageHandle = _.get(inputs, 'image.create.handle');
+    const queryImageId = _.get(data, 'recipe.image.id');
+    if (queryImageHandle !== inputsImageHandle && !_.isNil(inputsImageHandle)) {
+      await deleteAssetMutation({
+        variables: {
+          where: {
+            id: queryImageId,
+          },
         },
-        where: { id },
-      },
-    });
+      });
+    }
+    const updateObj = createUpdateObj(data, inputs);
+    if (!_.isEmpty(updateObj)) {
+      const result = await updateRecipeMutation({
+        refetchQueries: [
+          { query: recipeGraphQL, variables: { where: { id } } },
+        ],
+        variables: {
+          data: {
+            ...updateObj,
+          },
+          where: { id },
+        },
+      });
+      const updateRecipe = _.get(result, 'data.updateRecipe');
+      return updateRecipe;
+    } else {
+      const recipe = _.get(data, 'recipe');
+      return recipe;
+    }
   };
 
   const {
@@ -41,6 +71,7 @@ export const UpdateRecipe = ({ id }) => {
     handleDeleteIngredient,
     handleDropdownChange,
     handleUpdate,
+    handleSubmitImage,
     setInputs,
   } = submitForm(
     {
@@ -52,14 +83,18 @@ export const UpdateRecipe = ({ id }) => {
     initiateUpdateRecipe,
   );
   if (!isQueryLoading && recipeState.isQueryLoading) {
-    const { __type, ...loadedRecipe } = _.get(data, 'recipe');
+    const { __typename, ...loadedRecipe } = _.get(data, 'recipe');
     setInputs((state) => ({ ...state, ...loadedRecipe }));
     setRecipeState((state) => ({ ...state, isQueryLoading }));
   }
 
   if (!data) return <Loading />;
 
-  const disabled = isQueryLoading || updateRecipeLoading;
+  const disabled =
+    isQueryLoading ||
+    updateRecipeLoading ||
+    recipeState.isPicUploading ||
+    deleteAssetLoading;
 
   return (
     <Form onFinish={handleUpdate}>
@@ -87,13 +122,26 @@ export const UpdateRecipe = ({ id }) => {
         handleDropdownChange={handleDropdownChange}
       />
       <Row>
-        <Col span={16} />
+        <Col span={12} />
+        <Col span={4}>
+          <Form.Item label="Upload Image">
+            {inputs.image ? <GraphImg image={inputs.image} /> : null}
+            <PictureUploader
+              setRecipeState={setRecipeState}
+              handleSubmitImage={handleSubmitImage}
+            />
+          </Form.Item>
+        </Col>
         <Col span={4}>
           <Form.Item label="Action">
             <Button block disabled={disabled} type="primary" htmlType="submit">
               Update Recipe
             </Button>
-            <DeleteButton id={id} disabled={disabled} />
+            <DeleteButton
+              id={id}
+              disabled={disabled}
+              imageId={_.get(inputs, 'image.id')}
+            />
           </Form.Item>
         </Col>
       </Row>
