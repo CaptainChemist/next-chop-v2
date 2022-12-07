@@ -16,7 +16,7 @@
     "@apollo/react-hooks": "^3.1.5",
     "@apollo/react-ssr": "^3.1.5",
     "@auth0/nextjs-auth0": "^0.13.0",
-    "@graphql-codegen/cli": "^1.13.5",
+    "@graphql-codegen/cli": "^1.21.8",
     "@graphql-codegen/typescript": "^1.13.5",
     "@graphql-codegen/typescript-operations": "^1.13.5",
     "antd": "^4.2.2",
